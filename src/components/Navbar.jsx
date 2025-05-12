@@ -1,8 +1,14 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 export const Navbar = ({ favoritos }) => {
 
-	const [showDropdown, setShowDropdown] = useState(false)
+	const { store, dispatch } = useGlobalReducer()
+
+	const eliminarFavorito = (fav) => {
+		dispatch({ type: 'eliminar_favoritos', payload: fav });
+	}
+
+
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
@@ -31,13 +37,16 @@ export const Navbar = ({ favoritos }) => {
 								<li><span className="dropdown-item">No hay favoritos</span></li>
 							) : (
 								favoritos.map((fav, index) => (
-									<li key={`${fav.category}-${fav.id}-${index}`}>
+									<li key={`${fav.category}-${fav.id}-${index}`} className="d-flex justify-content-between align-items-center px-2 py-2">
 										<Link
 											to={`/detalles/${fav.category}/${fav.id}`}
 											className="dropdown-item text-primary"
 										>
 											{fav.name}
 										</Link>
+										<span onClick={() => eliminarFavorito(fav)} >
+											<i className="fa-solid fa-trash"></i>
+										</span>
 									</li>
 								))
 							)}

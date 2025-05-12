@@ -4,6 +4,7 @@ export const initialStore = () => {
     pokemons: [],
     items: [],
     favoritos: [],
+    locations:[],
     todos: [
       {
         id: 1,
@@ -30,6 +31,11 @@ export default function storeReducer(store, action = {}) {
       return {
         ...store,
         items: action.payload
+      };
+      case 'load_types':
+      return {
+        ...store,
+        types: action.payload
       };
     case "load_favoritos":
       return {

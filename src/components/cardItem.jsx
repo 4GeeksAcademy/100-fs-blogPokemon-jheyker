@@ -45,7 +45,7 @@ export const CardItem = ({ name, url, añadirFavorito, eliminarFavorito, favorit
     }
 
     return (
-        <div className="card h-100 d-flex flex-column " style={{ width: "15rem", minHeight: "26rem"  }}>
+        <div className="card h-100 d-flex flex-column " style={{ width: "15rem", minHeight: "15rem"  }}>
             <img
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${itemName}.png`}
                 className="card-img-top"
@@ -61,7 +61,7 @@ export const CardItem = ({ name, url, añadirFavorito, eliminarFavorito, favorit
                 </p>
                 <div className="d-flex flex-row-reverse">
                 <button
-                    className="btn btn-danger"
+                    className="btn btn-danger ms-1"
                     onClick={handleFavoritoClick}
                 >
                     {esFavorito ? <i className="fa-solid fa-heart"></i> : <i className="fa-regular fa-heart"></i>}

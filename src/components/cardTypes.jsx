@@ -1,36 +1,39 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-export const CardPokemon = ({ name, url, añadirFavorito, eliminarFavorito,favoritos }) => {
+export const CardTypes = ({ name, url, añadirFavorito, eliminarFavorito, favoritos }) => {
     const navigate = useNavigate();
+    const [typesDetalles, setTypesDetalles] = useState();
 
     const aux = url.split('/');
-    const id = aux[6]
-    const [pokemonDetalles, setPokemonDetalles] = useState()
+    const id = aux[6];
 
-
+    if (Number(id) > 18) {
+        return null;
+    }
     useEffect(() => {
-        const fetchPokemonDetalles = async () => {
-            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        const fetchTypesDetalles = async () => {
+            const res = await fetch(`https://pokeapi.co/api/v2/type/${id}`);
             const data = await res.json();
-            setPokemonDetalles({
-                types: data?.types?.map(type => type.type.name).join(", "),
-                height: data.height,
-                weight: data.weight
+            setTypesDetalles({
+                fuerteContra: data?.damage_relations?.double_damage_to || [],
+                debilContra: data?.damage_relations?.double_damage_from || [],
             });
         };
-        fetchPokemonDetalles();
-    }, [id])
-    const esFavorito = favoritos.some(fav => fav.id === Number(id) && fav.category === "pokemon")
+        fetchTypesDetalles();
+    }, [id]);
+
+    const esFavorito = favoritos.some(fav => fav.id === Number(id) && fav.category === "types")
+
     const handleClick = () => {
-        navigate(`/detalles/pokemon/${id}`);
+        navigate(`/detalles/types/${id}`);
     }
+
     const handleFavoritoClick = () => {
         const nuevoFavorito = {
             id: parseInt(id),
             name: name,
-            category: "pokemon"
+            category: "types"
         };
 
         if (esFavorito) {
@@ -38,26 +41,27 @@ export const CardPokemon = ({ name, url, añadirFavorito, eliminarFavorito,favor
         } else {
             añadirFavorito(nuevoFavorito);
         }
-
-    ;
+        ;
     }
+
     return (
-        <div className="card h-100 d-flex flex-column" style={{ width: '15rem',minHeight: "15rem"  }}>
+        <div className="card h-100 d-flex flex-column " style={{ width: "15rem", minHeight: "15rem" }}>
             <img
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
-                className="card-img-top"
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/${id}.png`}
+                className="card-img-top p-3 mt-3"
                 alt={name}
             />
             <div className="card-body">
                 <h5 className="card-title text-capitalize">{name}</h5>
                 <p className="card-text">
-                    <strong>Types: </strong>{pokemonDetalles?.types}
+                    <strong>Fuerte contra: </strong>{" "} {typesDetalles?.fuerteContra?.length > 0
+                        ? typesDetalles.fuerteContra[0].name
+                        : "Ninguno"}
                 </p>
                 <p className="card-text">
-                    <strong>Height: </strong>{pokemonDetalles?.height} dm
-                </p>
-                <p className="card-text">
-                    <strong>Weight: </strong>{pokemonDetalles?.weight} hg
+                    <strong>Débil contra: </strong>{typesDetalles?.debilContra?.length > 0
+                        ? typesDetalles.debilContra[0].name
+                        : "Ninguno"}
                 </p>
                 <div className="d-flex flex-row-reverse">
                     <button
@@ -72,7 +76,5 @@ export const CardPokemon = ({ name, url, añadirFavorito, eliminarFavorito,favor
                 </div>
             </div>
         </div>
-    )
-
-
-}
+    );
+};

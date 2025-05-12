@@ -21,6 +21,11 @@ export function StoreProvider({ children }) {
 
             dispatch({ type: 'load_items', payload: data })
         )
+
+        servicios.getAllTypes().then(data =>
+
+            dispatch({ type: 'load_types', payload: data })
+        )
         const favoritosGuardados = localStorage.getItem("favoritos");
         if (favoritosGuardados) {
             dispatch({

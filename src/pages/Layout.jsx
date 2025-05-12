@@ -9,9 +9,15 @@ export const Layout = () => {
     const { store } = useGlobalReducer()
     return (
         <ScrollToTop>
-            <Navbar favoritos={store.favoritos}/>
-                <Outlet />
-            <Footer />
+            <div className="d-flex flex-column min-vh-100">
+                <Navbar favoritos={store.favoritos} />
+
+                <main className="flex-grow-1">
+                    <Outlet />
+                </main>
+
+                <Footer />
+            </div>
         </ScrollToTop>
     )
 }
